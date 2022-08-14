@@ -1,4 +1,6 @@
-# Downloads the Casual BA Race Log as JSON
+#!/usr/bin/env python3
+
+# Downloads the Casual BA Race Log as JSON.
 
 import os
 import requests
