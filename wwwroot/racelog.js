@@ -2,33 +2,45 @@
     let db;
     const DB_VERSION = 1;
 
-    racelog.init = function(callback) {
-        const req = window.indexedDB.open("racelog", DB_VERSION);
-        req.onerror = (event) => {
-            console.log(event);
-        };
-        req.onsuccess = (event) => {
-            db = event.target.result;
-            racelog.objectStore().clear().onsuccess = (event) => {
-                fillDb(callback);
+    racelog.init = function() {
+        return new Promise((resolve, reject) => {
+            const req = window.indexedDB.open("racelog", DB_VERSION);
+            req.onerror = (event) => {
+                console.log(event);
+                reject();
             };
-        };
-        req.onupgradeneeded = (event) => {
-            const db = event.target.result;
-            db.createObjectStore("races", {
-                keyPath: "id",
-                autoIncrement: false
-            });
-        };
+            req.onsuccess = (event) => {
+                db = event.target.result;
+                objectStore().clear().onsuccess = (event) => {
+                    fillDb(resolve);
+                };
+            };
+            req.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                db.createObjectStore("races", {
+                    keyPath: "id",
+                    autoIncrement: false
+                });
+            };
+        });
     };
 
-    racelog.transaction = function() {
+    racelog.getAll = function() {
+        return new Promise((resolve, reject) => {
+            const req = objectStore().getAll();
+            req.onsuccess = (event) => {
+                resolve(event.target.result);
+            };
+        });
+    };
+
+    function transaction(){
         const tx = db.transaction(["races"], "readwrite");
         return tx;
     };
 
-    racelog.objectStore = function(tx) {
-        tx = tx || racelog.transaction();
+    function objectStore(tx) {
+        tx = tx || transaction();
         const objectStore = tx.objectStore("races");
         return objectStore;
     };
@@ -50,7 +62,7 @@
     function fillDb(callback) {
         const fetchRacelog = fetch('./data/racelog.json').then((resp) => resp.json());
         fetchRacelog.then(data => {
-            const tx = racelog.transaction();
+            const tx = transaction();
             const decrementLatch = (() => {
                 let latch = data.values.length;
                 return () => {
@@ -60,7 +72,7 @@
                 };
             })();
             for (let i = 0; i < data.values.length; ++i) {
-                const addReq = racelog.objectStore(tx).add({
+                const addReq = objectStore(tx).add({
                     id: i,
                     ...mapRow(data.values[i])
                 });

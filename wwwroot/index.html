@@ -8,17 +8,15 @@
 <body>
     <h1>Hello world!</h1>
     <script>
-        racelog.init(function() {
-            const req = racelog.objectStore().getAll();
-            req.onsuccess = (event) => {
-                const races = event.target.result;
+        racelog.init()
+            .then(() => racelog.getAll())
+            .then(races => {
                 races.forEach(r => {
                     const p = document.createElement('p');
                     p.innerText = `${r.date} ${r.time} ${r.position} ${r.captain} ${r.pick1} ${r.pick2} ${r.pick3} ${r.pick4}`;
                     document.body.append(p);
                 });
-            };
-        });
+            });
     </script>
 </body>
 </html>
