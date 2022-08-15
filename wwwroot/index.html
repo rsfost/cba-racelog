@@ -1,22 +1,32 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
 <head>
     <title>Casual BA Race Log Stats</title>
     <script src="./racelog.js"></script>
+    <script src="https://unpkg.com/vue@3"></script>
 </head>
 <body>
     <h1>Hello world!</h1>
+
+    <div id="app">
+        <p v-for="r in races" :key="r.id">
+            {{ r.date }} {{r.time}} {{r.position}} {{r.captain}} {{r.pick1}} {{r.pick2}} {{r.pick3}} {{r.pick4}}
+        </p>
+    </div>
     <script>
-        racelog.init()
-            .then(() => racelog.getAll())
-            .then(races => {
-                races.forEach(r => {
-                    const p = document.createElement('p');
-                    p.innerText = `${r.date} ${r.time} ${r.position} ${r.captain} ${r.pick1} ${r.pick2} ${r.pick3} ${r.pick4}`;
-                    document.body.append(p);
-                });
-            });
+        const { createApp } = Vue;
+        createApp({
+            data() {
+                return {
+                    races: []
+                }
+            },
+            async mounted() {
+                await racelog.init();
+                this.races = await racelog.getAll();
+            }
+        }).mount('#app');
     </script>
 </body>
 </html>
