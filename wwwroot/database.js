@@ -28,28 +28,25 @@ function objectStore(tx) {
 
 function fillDb(callback) {
     const fetchRacelog = fetch('./data/racelog.json').then((resp) => resp.json());
-    const clearReq = objectStore().clear();
-    clearReq.onsuccess = (event) => {
-        fetchRacelog.then(racelog => {
-            const tx = transaction();
-            const decrementLatch = (() => {
-                let latch = racelog.values.length;
-                return () => {
-                    if (--latch <= 0) {
-                        callback(db);
-                    }
-                };
-            })();
-            for (let i = 0; i < racelog.values.length; ++i) {
-                const addReq = objectStore(tx).add({
-                    id: i,
-                    ...mapRow(racelog.values[i])
-                });
-                addReq.onsuccess = (event) => decrementLatch();
-                addReq.onerror = (event) => decrementLatch();
-            }
-        });
-    }
+    fetchRacelog.then(racelog => {
+        const tx = transaction();
+        const decrementLatch = (() => {
+            let latch = racelog.values.length;
+            return () => {
+                if (--latch <= 0) {
+                    callback(db);
+                }
+            };
+        })();
+        for (let i = 0; i < racelog.values.length; ++i) {
+            const addReq = objectStore(tx).add({
+                id: i,
+                ...mapRow(racelog.values[i])
+            });
+            addReq.onsuccess = (event) => decrementLatch();
+            addReq.onerror = (event) => decrementLatch();
+        }
+    });
 }
 
 function init(callback) {
@@ -59,7 +56,9 @@ function init(callback) {
     };
     req.onsuccess = (event) => {
         db = event.target.result;
-        fillDb(callback);
+        objectStore().clear().onsuccess = (event) => {
+            fillDb(callback);
+        };
     };
     req.onupgradeneeded = (event) => {
         const db = event.target.result;
