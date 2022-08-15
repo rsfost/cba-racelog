@@ -26,30 +26,39 @@ function objectStore(tx) {
     return objectStore;
 }
 
-function fillDb() {
+function fillDb(callback) {
     const fetchRacelog = fetch('./data/racelog.json').then((resp) => resp.json());
     const clearReq = objectStore().clear();
     clearReq.onsuccess = (event) => {
         fetchRacelog.then(racelog => {
+            let latch = racelog.values.length;
+            const decrementLatch = () => {
+                --latch;
+                if (latch == 0) {
+                    callback(db);
+                }
+            };
             const tx = transaction();
             for (let i = 0; i < racelog.values.length; ++i) {
-                objectStore(tx).add({
+                const addReq = objectStore(tx).add({
                     id: i,
                     ...mapRow(racelog.values[i])
                 });
+                addReq.onsuccess = (event) => decrementLatch();
+                addReq.onerror = (event) => decrementLatch();
             }
         });
     }
 }
 
-function init() {
+function init(callback) {
     const req = window.indexedDB.open("racelog", DB_VERSION);
     req.onerror = (event) => {
         console.log(event);
     };
     req.onsuccess = (event) => {
         db = event.target.result;
-        fillDb();
+        fillDb(callback);
     };
     req.onupgradeneeded = (event) => {
         const db = event.target.result;
@@ -59,5 +68,3 @@ function init() {
         });
     };
 }
-
-init();
