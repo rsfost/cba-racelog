@@ -31,14 +31,15 @@ function fillDb(callback) {
     const clearReq = objectStore().clear();
     clearReq.onsuccess = (event) => {
         fetchRacelog.then(racelog => {
-            let latch = racelog.values.length;
-            const decrementLatch = () => {
-                --latch;
-                if (latch == 0) {
-                    callback(db);
-                }
-            };
             const tx = transaction();
+            const decrementLatch = (() => {
+                let latch = racelog.values.length;
+                return () => {
+                    if (--latch <= 0) {
+                        callback(db);
+                    }
+                };
+            })();
             for (let i = 0; i < racelog.values.length; ++i) {
                 const addReq = objectStore(tx).add({
                     id: i,
