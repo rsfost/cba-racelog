@@ -8,8 +8,8 @@
 <body>
     <h1>Hello world!</h1>
     <script>
-        init(function(db) {
-            const req = objectStore().getAll();
+        racelog.init(function() {
+            const req = racelog.objectStore().getAll();
             req.onsuccess = (event) => {
                 const races = event.target.result;
                 races.forEach(r => {
