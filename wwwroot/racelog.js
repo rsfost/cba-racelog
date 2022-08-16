@@ -64,14 +64,14 @@
         fetchRacelog.then(data => {
             const tx = transaction();
             const decrementLatch = (() => {
-                let latch = data.values.length;
+                let latch = data.values.length - 1;
                 return () => {
                     if (--latch <= 0) {
                         callback();
                     }
                 };
             })();
-            for (let i = 0; i < data.values.length; ++i) {
+            for (let i = 1; i < data.values.length; ++i) {
                 const addReq = objectStore(tx).add({
                     id: i,
                     ...mapRow(data.values[i])
