@@ -1,0 +1,12 @@
+:root {
+    --smoky-black: #1c110aff;
+    --hunter-green: #295135ff;
+    --turquoise-green: #b5d6b2ff;
+    --cinereous: #93827fff;
+    --roman-silver: #808a9fff;
+}
+body {
+    background-color: var(--smoky-black);
+    color: var(--roman-silver);
+    font-size: 15pt;
+}

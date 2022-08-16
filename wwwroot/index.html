@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <title>Casual BA Race Log Stats</title>
+    <link rel="stylesheet" href="./style.css"/>
     <script src="./racelog.js"></script>
     <script src="https://unpkg.com/vue@3"></script>
 </head>
@@ -10,9 +11,28 @@
     <h1>Hello world!</h1>
 
     <div id="app">
-        <p v-for="r in races" :key="r.id">
-            {{ r.date }} {{r.time}} {{r.position}} {{r.captain}} {{r.pick1}} {{r.pick2}} {{r.pick3}} {{r.pick4}}
-        </p>
+        <table>
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Position</th>
+              <th>Captain</th>
+              <th>First pick</th>
+              <th>Second pick</th>
+              <th>Third pick</th>
+              <th>Fourth pick</th>
+            </tr>
+            <tr v-for="r in races" :key="r.id">
+                <th>{{r.date }}</th>
+                <th>{{r.time}}</th>
+                <th>{{r.position}}</th>
+                <th>{{r.captain}}</th>
+                <th>{{r.pick1}}</th>
+                <th>{{r.pick2}}</th>
+                <th>{{r.pick3}}</th>
+                <th>{{r.pick4}}</th>
+            </tr>
+        </table>
     </div>
     <script>
         const { createApp } = Vue;
