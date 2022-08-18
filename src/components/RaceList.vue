@@ -23,7 +23,7 @@ onMounted(async () => {
         <th>Fourth pick</th>
     </tr>
     <tr v-for="r in races" :key="r.id">
-        <th>{{r.date }}</th>
+        <th>{{r.prettyDate }}</th>
         <th>{{r.time}}</th>
         <th>{{r.position}}</th>
         <th>{{r.captain}}</th>

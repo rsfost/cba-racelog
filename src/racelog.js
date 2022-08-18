@@ -47,8 +47,22 @@ function objectStore(tx) {
 };
 
 function mapRow(row) {
+    // Parse date
+    const datePattern = /(\d\d?)\/(\d\d?)\/(\d\d\d\d)/;
+    let dateMatch = datePattern.exec(row[0]);
+    if (!dateMatch) {
+        dateMatch = ['1/1/1901', '1', '1', '1901'];
+    }
+    const date = new Date(
+        parseInt(dateMatch[3]),
+        parseInt(dateMatch[2]) - 1,
+        parseInt(dateMatch[1]));
+    const prettyDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+
+    // Return model
     return {
-        date: row[0],
+        date: date,
+        prettyDate: prettyDate,
         race: row[2],
         captain: row[3],
         pick1: row[4],
