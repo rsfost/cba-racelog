@@ -18,22 +18,40 @@ export async function init() {
         };
         req.onupgradeneeded = (event) => {
             const db = event.target.result;
-            db.createObjectStore("races", {
+            const objectStore = db.createObjectStore("races", {
                 keyPath: "id",
                 autoIncrement: false
             });
+            const dateIndex = objectStore.createIndex("date", "date", { unique: false });
         };
     });
 }
 
 export async function getAll() {
     return new Promise((resolve, reject) => {
-        const req = objectStore().getAll();
+        const index = dateIndex(objectStore());
+        const req = index.openCursor(undefined, 'prev');
+        const returnValue = [];
         req.onsuccess = (event) => {
-            resolve(event.target.result);
+            const cursor = event.target.result;
+            if (!cursor) {
+                resolve(returnValue);
+                return;
+            }
+            returnValue.push(cursor.value);
+            cursor.continue();
         };
     });
 };
+
+function createLatch(callback, countStart) {
+    let latch = countStart;
+    return () => {
+        if (--latch <= 0) {
+            callback();
+        }
+    };
+}
 
 function transaction(){
     const tx = db.transaction(["races"], "readwrite");
@@ -45,6 +63,10 @@ function objectStore(tx) {
     const objectStore = tx.objectStore("races");
     return objectStore;
 };
+
+function dateIndex(store) {
+    return store.index("date");
+}
 
 function mapRow(row) {
     // Parse date
@@ -78,21 +100,14 @@ function fillDb(callback) {
     const fetchRacelog = fetch('./data/racelog.json').then((resp) => resp.json());
     fetchRacelog.then(data => {
         const tx = transaction();
-        const decrementLatch = (() => {
-            let latch = data.values.length - 1;
-            return () => {
-                if (--latch <= 0) {
-                    callback();
-                }
-            };
-        })();
+        const latch = createLatch(callback, data.values.length - 1);
         for (let i = 1; i < data.values.length; ++i) {
             const addReq = objectStore(tx).add({
                 id: i,
                 ...mapRow(data.values[i])
             });
-            addReq.onsuccess = (event) => decrementLatch();
-            addReq.onerror = (event) => decrementLatch();
+            addReq.onsuccess = (event) => latch();
+            addReq.onerror = (event) => latch();
         }
     });
 }
