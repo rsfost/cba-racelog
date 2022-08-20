@@ -56,7 +56,7 @@ export async function getRaceDays() {
         const raceKeys = Object.keys(raceToTeams);
         raceKeys.sort();
         const races = [];
-        returnValue.set(currentTeams[0].prettyDate, races);
+        returnValue.set(currentTeams[0].date, races);
         raceKeys.forEach(key => {
             races.push(raceToTeams[key]);
         });
