@@ -1,10 +1,10 @@
 <script setup>
-import TeamList from './components/TeamList.vue'
+import RaceDays from './components/RaceDays.vue';
 </script>
 
 <template>
   <main>
-    <TeamList />
+    <RaceDays />
   </main>
 </template>
 

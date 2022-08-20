@@ -1,13 +1,7 @@
-<script setup>
-import { ref, onMounted } from 'vue';
-import * as racelog from '@/racelog.js';
-
-const teams = ref([]);
-
-onMounted(async () => {
-    await racelog.init();
-    teams.value = await racelog.getTeams();
-});
+<script>
+    export default {
+        props: ['teams']
+    }
 </script>
 
 <template>
