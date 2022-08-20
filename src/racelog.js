@@ -51,7 +51,15 @@ export async function getRaceDays() {
         if (!currentTeams || currentTeams.length <= 0) return;
         const raceToTeams = groupBy(currentTeams, 'race');
         Object.values(raceToTeams).forEach(race => {
-            race.sort((t1, t2) => t1.position - t2.position);
+            race.sort((t1, t2) => {
+                let pos1 = t1.position;
+                let pos2 = t2.position;
+                if (pos1 === 'DNF')
+                    pos1 = 1000;
+                if (pos2 === 'DNF')
+                    pos2 = 1000;
+                return pos1 - pos2;
+            });
         });
         const raceKeys = Object.keys(raceToTeams);
         raceKeys.sort();
@@ -138,7 +146,7 @@ function mapRow(row) {
         pick3: row[6],
         pick4: row[7],
         time: row[8],
-        position: row[9]
+        position: parseInt(row[9]) || 'DNF'
     };
 }
 
