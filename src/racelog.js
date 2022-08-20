@@ -18,7 +18,7 @@ export async function init() {
         };
         req.onupgradeneeded = (event) => {
             const db = event.target.result;
-            const objectStore = db.createObjectStore("races", {
+            const objectStore = db.createObjectStore("teams", {
                 keyPath: "id",
                 autoIncrement: false
             });
@@ -27,7 +27,7 @@ export async function init() {
     });
 }
 
-export async function getAll() {
+export async function getTeams() {
     return new Promise((resolve, reject) => {
         const index = dateIndex(objectStore());
         const req = index.openCursor(undefined, 'prev');
@@ -54,13 +54,13 @@ function createLatch(callback, countStart) {
 }
 
 function transaction(){
-    const tx = db.transaction(["races"], "readwrite");
+    const tx = db.transaction(["teams"], "readwrite");
     return tx;
 };
 
 function objectStore(tx) {
     tx = tx || transaction();
-    const objectStore = tx.objectStore("races");
+    const objectStore = tx.objectStore("teams");
     return objectStore;
 };
 

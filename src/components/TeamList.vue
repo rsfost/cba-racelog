@@ -2,11 +2,11 @@
 import { ref, onMounted } from 'vue';
 import * as racelog from '@/racelog.js';
 
-const races = ref([]);
+const teams = ref([]);
 
 onMounted(async () => {
     await racelog.init();
-    races.value = await racelog.getAll();
+    teams.value = await racelog.getTeams();
 });
 </script>
 
@@ -22,15 +22,15 @@ onMounted(async () => {
         <th>Third pick</th>
         <th>Fourth pick</th>
     </tr>
-    <tr v-for="r in races" :key="r.id">
-        <th>{{r.prettyDate }}</th>
-        <th>{{r.time}}</th>
-        <th>{{r.position}}</th>
-        <th>{{r.captain}}</th>
-        <th>{{r.pick1}}</th>
-        <th>{{r.pick2}}</th>
-        <th>{{r.pick3}}</th>
-        <th>{{r.pick4}}</th>
+    <tr v-for="t in teams" :key="t.id">
+        <th>{{t.prettyDate }}</th>
+        <th>{{t.time}}</th>
+        <th>{{t.position}}</th>
+        <th>{{t.captain}}</th>
+        <th>{{t.pick1}}</th>
+        <th>{{t.pick2}}</th>
+        <th>{{t.pick3}}</th>
+        <th>{{t.pick4}}</th>
     </tr>
 </table>
 </template>
