@@ -44,7 +44,7 @@ export async function getTeams() {
     });
 };
 
-export async function getRaceDays() {
+export async function getRaceDays(start = 0, rows = 10000) {
     const teams = await getTeams();
     const returnValue = new Map();
     const appendRaceDay = currentTeams => {
@@ -78,15 +78,37 @@ export async function getRaceDays() {
     // and build return value.
     let currentDate = teams[0].date;
     let currentTeams = [];
-    teams.forEach(team => {
+    const startTeam = (function() {
+        let dayCount = 1;
+        let i = 0;
+        if (start <= 0)
+            return 0;
+        for (; i < teams.length; ++i) {
+            const team = teams[i];
+            const isNewDay = currentDate.getTime() !== team.date.getTime();
+            if (isNewDay) {
+                ++dayCount;
+                currentDate = team.date;
+                if (dayCount >= start) {
+                    break;
+                }
+            }
+        }
+        return i;
+    })();
+    for (let i = startTeam; i < teams.length; ++i) {
+        const team = teams[i];
         const isNewDay = currentDate.getTime() !== team.date.getTime();
         if (isNewDay) {
             appendRaceDay(currentTeams);
             currentTeams = [];
             currentDate = team.date;
+            if (returnValue.size >= rows) {
+                break;
+            }
         }
         currentTeams.push(team);
-    });
+    }
     appendRaceDay(currentTeams);
     return returnValue;
 }
