@@ -44,6 +44,52 @@ export async function getTeams() {
     });
 };
 
+export async function getRaceDays() {
+    const teams = await getTeams();
+    const returnValue = new Map();
+    const appendRaceDay = currentTeams => {
+        if (!currentTeams || currentTeams.length <= 0) return;
+        const raceToTeams = groupBy(currentTeams, 'race');
+        Object.values(raceToTeams).forEach(race => {
+            race.sort((t1, t2) => t1.position - t2.position);
+        });
+        const raceKeys = Object.keys(raceToTeams);
+        raceKeys.sort();
+        const races = [];
+        returnValue.set(currentTeams[0].prettyDate, races);
+        raceKeys.forEach(key => {
+            races.push(raceToTeams[key]);
+        });
+    };
+
+    if (!teams || teams.length <= 0) {
+        return returnValue;
+    }
+
+    // Iterate through teams array with assumption items are sorted by date
+    // and build return value.
+    let currentDate = teams[0].date;
+    let currentTeams = [];
+    teams.forEach(team => {
+        const isNewDay = currentDate.getTime() !== team.date.getTime();
+        if (isNewDay) {
+            appendRaceDay(currentTeams);
+            currentTeams = [];
+            currentDate = team.date;
+        }
+        currentTeams.push(team);
+    });
+    appendRaceDay(currentTeams);
+    return returnValue;
+}
+
+function groupBy(xs, key) {
+    return xs.reduce(function(rv, x) {
+      (rv[x[key]] = rv[x[key]] || []).push(x);
+      return rv;
+    }, {});
+}
+
 function createLatch(callback, countStart) {
     let latch = countStart;
     return () => {
