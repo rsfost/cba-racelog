@@ -22,7 +22,7 @@ table {
     border-spacing: 0;
 }
 td {
-    padding: 5px;
+    padding: 10px;
     margin: 0;
 }
 tr:not(:last-child)>td {
