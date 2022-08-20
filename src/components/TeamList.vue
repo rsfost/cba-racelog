@@ -6,16 +6,6 @@
 
 <template>
 <table>
-    <tr>
-        <th>Date</th>
-        <th>Time</th>
-        <th>Position</th>
-        <th>Captain</th>
-        <th>First pick</th>
-        <th>Second pick</th>
-        <th>Third pick</th>
-        <th>Fourth pick</th>
-    </tr>
     <tr v-for="t in teams" :key="t.id">
         <th>{{t.prettyDate }}</th>
         <th>{{t.time}}</th>
