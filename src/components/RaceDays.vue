@@ -59,7 +59,9 @@ function prettyPrintDate(date) {
 
 <template>
     <div v-for="[date, races] in raceDays">
-        <h1>{{ prettyPrintDate(date) }}</h1>
+        <div class="date">
+            <h1>{{ prettyPrintDate(date) }}</h1>
+        </div>
         <div v-for="(teams, key) in races">
             <h2>Race {{ key + 1 }}</h2>
             <TeamList :teams="teams"/>
@@ -68,5 +70,10 @@ function prettyPrintDate(date) {
 </template>
 
 <style scoped>
-
+.date {
+    top: 0;
+    position: sticky;
+    background: var(--color-background);
+    z-index: 10;
+}
 </style>
