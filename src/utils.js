@@ -1,5 +1,20 @@
 export const name = 'utils';
 
+const monthMap = {
+    '1': 'January',
+    '2': 'February',
+    '3': 'March',
+    '4': 'April',
+    '5': 'May',
+    '6': 'June',
+    '7': 'July',
+    '8': 'August',
+    '9': 'September',
+    '10': 'October',
+    '11': 'November',
+    '12': 'December'
+};
+
 /**
  * Converts date string in form "dd/mm/yyyy" to string in form "Month dd, yyyy"
  */
@@ -10,47 +25,6 @@ export function prettyPrintDate(date) {
     if (!dateParts || dateParts.length < 3) {
         dateParts = ['01', '01', '1901'];
     }
-    let monthStr;
-    switch (parseInt(dateParts[1])) {
-        case 1:
-            monthStr = 'January';
-            break;
-        case 2:
-            monthStr = 'February';
-            break;
-        case 3:
-            monthStr = 'March';
-            break;
-        case 4:
-            monthStr = 'April';
-            break;
-        case 5:
-            monthStr = 'May';
-            break;
-        case 6:
-            monthStr = 'June';
-            break;
-        case 7:
-            monthStr = 'July';
-            break;
-        case 8:
-            monthStr = 'August';
-            break;
-        case 9:
-            monthStr = 'September';
-            break;
-        case 10:
-            monthStr = 'October';
-            break;
-        case 11:
-            monthStr = 'November';
-            break;
-        case 12:
-            monthStr = 'December';
-            break;
-        default:
-            monthStr = dateParts[1];
-            break;
-    }
+    const monthStr = monthMap[dateParts[1].replace(/^0+/, '')] || dateParts[1];
     return `${monthStr} ${dateParts[0]}, ${dateParts[2]}`;
 }
