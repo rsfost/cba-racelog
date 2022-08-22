@@ -1,4 +1,4 @@
-export const name = 'racelog';
+export const name = 'racelog_old';
 
 let db;
 const DB_VERSION = 1;
