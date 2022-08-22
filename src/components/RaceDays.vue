@@ -7,62 +7,68 @@ const raceDays = ref();
 
 onMounted(async () => {
     await racelog.init();
-    raceDays.value = await racelog.getRaceDays();
+    raceDays.value = racelog.getRaceDays();
 });
 
 function prettyPrintDate(date) {
+    let dateParts;
+    date = date || '01/01/1901';
+    dateParts = date.split('/');
+    if (!dateParts || dateParts.length < 3) {
+        dateParts = ['01', '01', '1901'];
+    }
     let monthStr;
-    switch (date.getMonth()) {
-        case 0:
+    switch (parseInt(dateParts[1])) {
+        case 1:
             monthStr = 'January';
             break;
-        case 1:
+        case 2:
             monthStr = 'February';
             break;
-        case 2:
+        case 3:
             monthStr = 'March';
             break;
-        case 3:
+        case 4:
             monthStr = 'April';
             break;
-        case 4:
+        case 5:
             monthStr = 'May';
             break;
-        case 5:
+        case 6:
             monthStr = 'June';
             break;
-        case 6:
+        case 7:
             monthStr = 'July';
             break;
-        case 7:
+        case 8:
             monthStr = 'August';
             break;
-        case 8:
+        case 9:
             monthStr = 'September';
             break;
-        case 9:
+        case 10:
             monthStr = 'October';
             break;
-        case 10:
+        case 11:
             monthStr = 'November';
             break;
-        case 11:
+        case 12:
             monthStr = 'December';
             break;
         default:
-            monthStr = date.getMonth().toString();
+            monthStr = dateParts[1];
             break;
     }
-    return `${monthStr} ${date.getDate()}, ${date.getFullYear()}`;
+    return `${monthStr} ${dateParts[0]}, ${dateParts[2]}`;
 }
 </script>
 
 <template>
-    <div v-for="[date, races] in raceDays">
+    <div v-for="raceDay in raceDays">
         <div class="date">
-            <h1>{{ prettyPrintDate(date) }}</h1>
+            <h1>{{ prettyPrintDate(raceDay.date) }}</h1>
         </div>
-        <div v-for="(teams, key) in races">
+        <div v-for="(teams, key) in raceDay.races">
             <h2>Race {{ key + 1 }}</h2>
             <TeamList :teams="teams"/>
         </div>
