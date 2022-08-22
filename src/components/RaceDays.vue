@@ -1,15 +1,11 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import * as racelog from '@/racelog.js';
 import TeamList from './TeamList.vue';
+</script>
 
-const raceDays = ref();
-
-onMounted(async () => {
-    await racelog.init();
-    raceDays.value = racelog.getRaceDays();
-});
-
+<script>
+export default {
+    props: ['raceDays']
+}
 function prettyPrintDate(date) {
     let dateParts;
     date = date || '01/01/1901';
