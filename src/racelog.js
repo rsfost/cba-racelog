@@ -7,6 +7,6 @@ export async function init() {
     racelog = await resp.json();
 }
 
-export function getRaceDays() {
-    return racelog;
+export function getRaceDays(start = 0, count = 10) {
+    return racelog.slice(start, start + count);
 }
