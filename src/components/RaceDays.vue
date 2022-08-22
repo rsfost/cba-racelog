@@ -1,12 +1,11 @@
 <script setup>
 import TeamList from './TeamList.vue';
 import { prettyPrintDate } from '@/utils.js';
-</script>
-
-<script>
-export default {
-    props: ['raceDays']
-}
+defineProps({
+    raceDays: {
+        required: true
+    }
+});
 </script>
 
 <template>

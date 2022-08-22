@@ -1,7 +1,9 @@
-<script>
-    export default {
-        props: ['teams']
+<script setup>
+defineProps({
+    teams: {
+        required: true
     }
+});
 </script>
 
 <template>
