@@ -13,6 +13,9 @@ defineProps({
         <div class="date">
             <h1>{{ prettyPrintDate(raceDay.date) }}</h1>
         </div>
+        <div>
+            MVP ({{ raceDay.mvp.wins }} wins): {{ raceDay.mvp.players.join(', ') }}
+        </div>
         <div v-for="(teams, key) in raceDay.races">
             <h2>Race {{ key + 1 }}</h2>
             <TeamList :teams="teams"/>
