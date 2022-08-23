@@ -1,16 +1,54 @@
 export const name = 'racelog';
 
-let racelog;
+let db;
 
 export async function init() {
-    const resp = await fetch('./data/racelog.json');
-    racelog = await resp.json();
+    return new Promise((resolve, reject) => {
+        const req = window.indexedDB.open('racelog');
+        req.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            const objectStore = db.createObjectStore("racedays", {
+                keyPath: "id",
+                autoIncrement: false
+            });
+            const dateIndex = objectStore.createIndex("date", "date", { unique: false });
+        };
+        req.onsuccess = (event) => {
+            db = event.target.result;
+            const worker = new Worker('/workers/init.js');
+            worker.onmessage = (e) => {
+                resolve();
+            }
+        }
+    });
 }
 
-export function getRaceDays(start = 0, count = 10) {
-    return racelog
-        .slice(start, start + count)
-        .map((raceDay, id) => decorate(raceDay, id));
+export async function getRaceDays(start = 0, count = 10) {
+    return new Promise((resolve, reject) => {
+        const keyRange = IDBKeyRange.bound(start, start + count, false, true);
+        const req = objectStore().openCursor(keyRange);
+        const returnValue = [];
+        req.onsuccess = (event) => {
+            const cursor = event.target.result;
+            if (!cursor) {
+                resolve(returnValue);
+                return;
+            }
+            returnValue.push(decorate(cursor.value));
+            cursor.continue();
+        };
+    });
+}
+
+function transaction(){
+    const tx = db.transaction(["racedays"], "readonly");
+    return tx;
+}
+
+function objectStore(tx) {
+    tx = tx || transaction();
+    const objectStore = tx.objectStore("racedays");
+    return objectStore;
 }
 
 function decorate(raceDay, id) {

@@ -5,9 +5,8 @@ import * as racelog from '@/racelog.js';
 
 const raceDays = ref();
 onMounted(async () => {
-  const minWait = new Promise(resolve => setTimeout(resolve, 500));
-  await Promise.all([racelog.init(), minWait]);
-  raceDays.value = racelog.getRaceDays();
+  await racelog.init();
+  raceDays.value = await racelog.getRaceDays();
 });
 </script>
 
