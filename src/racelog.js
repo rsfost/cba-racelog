@@ -1,28 +1,19 @@
 import InitWorker from './workers/init?worker'
-
+import { initdb, objectStore, transaction } from './db'
 export const name = 'racelog';
 
 let db;
 
 export async function init() {
-    return new Promise((resolve, reject) => {
-        const req = window.indexedDB.open('racelog');
-        req.onupgradeneeded = (event) => {
-            const db = event.target.result;
-            const objectStore = db.createObjectStore("racedays", {
-                keyPath: "id",
-                autoIncrement: false
-            });
-            const dateIndex = objectStore.createIndex("date", "date", { unique: false });
-        };
-        req.onsuccess = (event) => {
-            db = event.target.result;
-            const worker = new InitWorker();
-            worker.onmessage = (e) => {
-                resolve();
-            }
+    const dbPromise = initdb();
+    const workerPromise = new Promise((resolve, reject) => {
+        const worker = new InitWorker();
+        worker.onmessage = (e) => {
+            resolve();
         }
     });
+    await workerPromise;
+    db = await dbPromise;
 }
 
 export async function getRaceDays(start = 0, count = 10) {
@@ -40,17 +31,6 @@ export async function getRaceDays(start = 0, count = 10) {
             cursor.continue();
         };
     });
-}
-
-function transaction(){
-    const tx = db.transaction(["racedays"], "readonly");
-    return tx;
-}
-
-function objectStore(tx) {
-    tx = tx || transaction();
-    const objectStore = tx.objectStore("racedays");
-    return objectStore;
 }
 
 function decorate(raceDay, id) {
