@@ -1,3 +1,5 @@
+import InitWorker from './workers/init?worker'
+
 export const name = 'racelog';
 
 let db;
@@ -15,7 +17,7 @@ export async function init() {
         };
         req.onsuccess = (event) => {
             db = event.target.result;
-            const worker = new Worker('/workers/init.js');
+            const worker = new InitWorker();
             worker.onmessage = (e) => {
                 resolve();
             }
