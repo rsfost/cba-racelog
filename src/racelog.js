@@ -1,4 +1,5 @@
 import InitWorker from './workers/init?worker'
+import StatsWorker from './workers/stats?worker'
 import { initdb, objectStore, transaction } from './db'
 export const name = 'racelog';
 
@@ -33,12 +34,25 @@ export async function getRaceDays(start = 0, count = 10) {
     });
 }
 
-function decorate(raceDay, id) {
+function decorate(raceDay) {
     const mvp = calcMvp(raceDay);
     return {
         ...raceDay,
-        mvp: calcMvp(raceDay)
+        mvp: calcMvp(raceDay),
+        stats: calcStats(raceDay.id)
     };
+}
+
+function calcStats(raceId) {
+    const worker = new StatsWorker();
+    const promise = new Promise((resolve, reject) => {
+        worker.onmessage = (e) => {
+            resolve(e.data);
+            worker.terminate();
+        }
+    });
+    worker.postMessage(raceId);
+    return promise;
 }
 
 function normalizeName(name) {
