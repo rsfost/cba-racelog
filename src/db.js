@@ -30,3 +30,18 @@ export function objectStore(tx, scope = "readonly") {
     const objectStore = tx.objectStore("racedays");
     return objectStore;
 }
+
+export function forEach(keyRange, func) {
+    return new Promise((resolve, reject) => {
+        const req = objectStore().openCursor(keyRange);
+        req.onsuccess = (event) => {
+            const cursor = event.target.result;
+            if (!cursor) {
+                resolve();
+                return;
+            }
+            func(cursor.value);
+            cursor.continue();
+        };
+    });
+}
