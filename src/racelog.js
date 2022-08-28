@@ -1,6 +1,6 @@
 import InitWorker from './workers/init?worker'
 import StatsWorker from './workers/stats?worker'
-import { initdb, objectStore, transaction } from './db'
+import { initdb, forEach } from './db'
 export const name = 'racelog';
 
 let db;
@@ -18,20 +18,12 @@ export async function init() {
 }
 
 export async function getRaceDays(start = 0, count = 10) {
-    return new Promise((resolve, reject) => {
-        const keyRange = IDBKeyRange.bound(start, start + count, false, true);
-        const req = objectStore().openCursor(keyRange);
-        const returnValue = [];
-        req.onsuccess = (event) => {
-            const cursor = event.target.result;
-            if (!cursor) {
-                resolve(returnValue);
-                return;
-            }
-            returnValue.push(decorate(cursor.value));
-            cursor.continue();
-        };
+    const keyRange = IDBKeyRange.bound(start, start + count, false, true);
+    const returnValue = [];
+    await forEach(keyRange, (raceDay) => {
+        returnValue.push(decorate(raceDay))
     });
+    return returnValue;
 }
 
 function decorate(raceDay) {
