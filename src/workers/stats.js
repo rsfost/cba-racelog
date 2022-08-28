@@ -80,7 +80,7 @@ onmessage = async function(e) {
         stat.total = stat.pickTotal.reduce((a, b) => a + b);
         stat.wins = stat.pickWins.reduce((a, b) => a + b);
         stat.winrate = round(stat.wins / stat.total);
-        stat.pickWinrate = stat.pickWins.map((wins, i) => round(wins / stat.pickTotal[i]));
+        stat.pickWinrate = stat.pickWins.map((wins, i) => round(wins / (stat.pickTotal[i] || 1)));
     });
     const candidates = Object.values(stats)
         .filter(stat => stat.total >= MIN_OVERALL_ACTIVITY)
