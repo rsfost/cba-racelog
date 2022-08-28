@@ -10,7 +10,7 @@ function normalizeName(name) {
 }
 
 function round(num) {
-    return Math.round((num + Number.EPSILON) * 100) / 100;
+    return Math.round((num + Number.EPSILON) * 1000) / 1000;
 }
 
 onmessage = async function(e) {
