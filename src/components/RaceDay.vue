@@ -35,22 +35,25 @@ function toPercentStr(ratio) {
         <h2>Race {{ key + 1 }}</h2>
         <TeamList :teams="teams"/>
     </div>
-    <div class="stats">
-        <div>
-            <h3 title="Past year">Top winrates</h3>
-            <ol>
-                <li v-for="leader in winrateLeaders">
-                    {{ toPercentStr(leader.winrate) }} {{ leader.player }}
-                </li>
-            </ol>
-        </div>
-        <div>
-            <h3 title="Past year">Top captains</h3>
-            <ol>
-                <li v-for="leader in captainLeaders">
-                    {{ toPercentStr(leader.pickWinrate[0]) }} {{ leader.player }}
-                </li>
-            </ol>
+    <div class="statWrapper">
+        <h3 style="text-align: center;">Leaderboard</h3>
+        <div class="stats">
+            <div>
+                <h3 title="Past year" style="text-align: center;">Winrates</h3>
+                <ol>
+                    <li v-for="leader in winrateLeaders">
+                        {{ toPercentStr(leader.winrate) }} {{ leader.player }}
+                    </li>
+                </ol>
+            </div>
+            <div>
+                <h3 title="Past year" style="text-align: center;">Captains</h3>
+                <ol>
+                    <li v-for="leader in captainLeaders">
+                        {{ toPercentStr(leader.pickWinrate[0]) }} {{ leader.player }}
+                    </li>
+                </ol>
+            </div>
         </div>
     </div>
 </div>
@@ -77,8 +80,15 @@ function toPercentStr(ratio) {
     margin-bottom: 10px;
 }
 
+.statWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .stats {
     display: flex;
     flex-direction: row;
+    justify-content: center;
 }
 </style>
