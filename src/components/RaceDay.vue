@@ -28,7 +28,7 @@ function toPercentStr(ratio) {
     <div class="date">
         <h1>{{ prettyPrintDate(raceDay.date) }}</h1>
     </div>
-    <div>
+    <div class="mvp">
         MVP ({{ raceDay.mvp.wins }} wins): {{ raceDay.mvp.players.join(', ') }}
     </div>
     <div class="race" v-for="(teams, key) in raceDay.races">
@@ -66,18 +66,23 @@ function toPercentStr(ratio) {
     position: sticky;
     background: var(--color-background-layer1);
     z-index: 10;
+    padding-left: 20px;
 }
 
 .raceDay {
     background: var(--color-background-layer1);
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
     margin-bottom: 20px;
 }
 
 .race {
     margin-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.mvp {
+    padding-left: 20px;
 }
 
 .statWrapper {
