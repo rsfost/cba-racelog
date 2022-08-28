@@ -32,6 +32,11 @@ function parseDate(dateStr) {
         }, racelog.length);
         racelog.forEach((raceDay, index) => {
             raceDay.date = parseDate(raceDay.date);
+            raceDay.races.forEach(race => {
+                race.forEach(team => {
+                    team.date = parseDate(team.date);
+                });
+            });
             const addReq = objectStore(tx).add({
                 id: index,
                 ...raceDay

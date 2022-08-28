@@ -31,6 +31,15 @@ export function objectStore(tx, scope = "readonly") {
     return objectStore;
 }
 
+export function get(id) {
+    return new Promise((resolve, reject) => {
+        const req = objectStore().get(id);
+        req.onsuccess = (event) => {
+            resolve(event.target.result);
+        };
+    });
+}
+
 export function forEach(keyRange, func) {
     return new Promise((resolve, reject) => {
         const req = objectStore().openCursor(keyRange);
