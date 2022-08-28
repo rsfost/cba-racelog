@@ -18,7 +18,7 @@ function parseDate(dateStr) {
     if (!dateParts || dateParts.length < 3) {
         dateParts = ['01', '01', '1901'];
     }
-    return new Date(dateParts[2], dateParts[1], dateParts[0]);
+    return new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
 }
 
 (async function() {
