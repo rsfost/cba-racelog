@@ -39,7 +39,7 @@ function toPercentStr(ratio) {
         <h3 style="text-align: center;">Leaderboard</h3>
         <div class="stats">
             <div>
-                <h3 title="Past year" style="text-align: center;">Winrates</h3>
+                <h3 title="Past year" style="text-align: center;">Overall</h3>
                 <ol>
                     <li v-for="leader in winrateLeaders">
                         {{ toPercentStr(leader.winrate) }} {{ leader.player }}
