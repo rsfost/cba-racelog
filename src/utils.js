@@ -1,30 +1,24 @@
 export const name = 'utils';
 
 const monthMap = {
-    '1': 'January',
-    '2': 'February',
-    '3': 'March',
-    '4': 'April',
-    '5': 'May',
-    '6': 'June',
-    '7': 'July',
-    '8': 'August',
-    '9': 'September',
-    '10': 'October',
-    '11': 'November',
-    '12': 'December'
+    0: 'January',
+    1: 'February',
+    2: 'March',
+    3: 'April',
+    4: 'May',
+    5: 'June',
+    6: 'July',
+    7: 'August',
+    8: 'September',
+    9: 'October',
+    10: 'November',
+    11: 'December'
 };
 
 /**
  * Converts date string in form "dd/mm/yyyy" to string in form "Month dd, yyyy"
  */
 export function prettyPrintDate(date) {
-    let dateParts;
-    date = date || '01/01/1901';
-    dateParts = date.split('/');
-    if (!dateParts || dateParts.length < 3) {
-        dateParts = ['01', '01', '1901'];
-    }
-    const monthStr = monthMap[dateParts[1].replace(/^0+/, '')] || dateParts[1];
-    return `${monthStr} ${dateParts[0]}, ${dateParts[2]}`;
+    const monthStr = monthMap[date.getMonth()];
+    return `${monthStr} ${date.getDate()}, ${date.getFullYear()}`;
 }
