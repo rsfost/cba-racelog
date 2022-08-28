@@ -1,5 +1,5 @@
 let db;
-import { initdb, objectStore, transaction} from '@/db'
+import { initdb, objectStore, transaction } from '@/db'
 
 function createLatch(callback, countStart) {
     let latch = countStart;

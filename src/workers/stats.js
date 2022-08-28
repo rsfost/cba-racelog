@@ -1,5 +1,4 @@
-import { initdb, objectStore, transaction} from '@/db'
-import { forEach } from '../db';
+import { initdb, forEach } from '@/db'
 
 const init = initdb();
 
