@@ -14,7 +14,11 @@ const RECENT_WEEK_RANGE = 5;
 // Minimum race participation over specified RECENT_WEEK_RANGE range
 const MIN_RECENT_ACTIVITY = 1;
 
+// Minimum sleeper pick activity over WEEK_RANGE
 const MIN_SLEEPER_ACTIVITY = 20;
+
+// Minimum captain activity over WEEK_RANGE
+const MIN_CAPTAIN_ACTIVITY = 10;
 
 function normalizeName(name) {
     // TODO: Known alts? ;)
@@ -99,7 +103,9 @@ onmessage = async function(e) {
         .filter(stat => stat.activity >= MIN_RECENT_ACTIVITY);
     const topWins = candidates.sort((stat1, stat2) => stat2.wins - stat1.wins).slice(0, 10);
     const topWinrates = candidates.sort((stat1, stat2) => stat2.winrate - stat1.winrate).slice(0, 10);
-    const topCaptains = candidates.sort((stat1, stat2) => stat2.pickWinrate[0] - stat1.pickWinrate[0]).slice(0, 10);
+    const topCaptains = candidates
+        .filter(stat => stat.pickTotal[0] >= MIN_CAPTAIN_ACTIVITY)
+        .sort((stat1, stat2) => stat2.pickWinrate[0] - stat1.pickWinrate[0]).slice(0, 10);
 
     const sleeperCandidates = Object.values(stats)
         .filter(stat => stat.sleeperTotal >= MIN_SLEEPER_ACTIVITY)
