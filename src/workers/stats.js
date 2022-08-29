@@ -2,6 +2,9 @@ import { initdb, forEach, get } from '@/db'
 
 const init = initdb();
 
+// Size of list to return for each statistic.
+const LIST_SIZE = 5;
+
 // The range over which statistics will be calculated for a particular day.
 const WEEK_RANGE = 52;
 
@@ -101,16 +104,16 @@ onmessage = async function(e) {
     const candidates = Object.values(stats)
         .filter(stat => stat.total >= MIN_OVERALL_ACTIVITY)
         .filter(stat => stat.activity >= MIN_RECENT_ACTIVITY);
-    const topWins = candidates.sort((stat1, stat2) => stat2.wins - stat1.wins).slice(0, 10);
-    const topWinrates = candidates.sort((stat1, stat2) => stat2.winrate - stat1.winrate).slice(0, 10);
+    const topWins = candidates.sort((stat1, stat2) => stat2.wins - stat1.wins).slice(0, LIST_SIZE);
+    const topWinrates = candidates.sort((stat1, stat2) => stat2.winrate - stat1.winrate).slice(0, LIST_SIZE);
     const topCaptains = candidates
         .filter(stat => stat.pickTotal[0] >= MIN_CAPTAIN_ACTIVITY)
-        .sort((stat1, stat2) => stat2.pickWinrate[0] - stat1.pickWinrate[0]).slice(0, 10);
+        .sort((stat1, stat2) => stat2.pickWinrate[0] - stat1.pickWinrate[0]).slice(0, LIST_SIZE);
 
     const sleeperCandidates = Object.values(stats)
         .filter(stat => stat.sleeperTotal >= MIN_SLEEPER_ACTIVITY)
         .filter(stat => stat.sleeperActivity >= MIN_RECENT_ACTIVITY);
-    const topSleepers = sleeperCandidates.sort((stat1, stat2) => stat2.sleeperWinrate - stat1.sleeperWinrate).slice(0, 10);
+    const topSleepers = sleeperCandidates.sort((stat1, stat2) => stat2.sleeperWinrate - stat1.sleeperWinrate).slice(0, LIST_SIZE);
 
     postMessage({topWins, topWinrates, topCaptains, topSleepers});
 }
