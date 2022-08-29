@@ -22,7 +22,8 @@ function parseDate(dateStr) {
 }
 
 (async function() {
-    const resp = await fetch('/data/racelog.json');
+    const url = import.meta.env.BASE_URL + 'data/racelog.json';
+    const resp = await fetch(url);
     const racelog = await resp.json();
     await initdb();
     objectStore(undefined, "readwrite").clear().onsuccess = (event) => {
