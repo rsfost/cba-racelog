@@ -14,6 +14,8 @@ const RECENT_WEEK_RANGE = 5;
 // Minimum race participation over specified RECENT_WEEK_RANGE range
 const MIN_RECENT_ACTIVITY = 1;
 
+const MIN_SLEEPER_ACTIVITY = 20;
+
 function normalizeName(name) {
     // TODO: Known alts? ;)
     return name.toLowerCase().replace(/[_-]/g, ' ');
@@ -52,12 +54,18 @@ onmessage = async function(e) {
                 player,
                 pickWins: [0, 0, 0, 0, 0],
                 pickTotal: [0, 0, 0, 0, 0],
-                activity: 0
+                activity: 0,
+                sleeperActivity: 0
             });
         }
         ++stat.pickTotal[pick];
         if (isWin) ++stat.pickWins[pick];
-        if (weekDiff(today, date) <= RECENT_WEEK_RANGE) ++stat.activity;
+        if (weekDiff(today, date) <= RECENT_WEEK_RANGE) {
+            ++stat.activity;
+            if (pick > 2) {
+                ++stat.sleeperActivity;
+            }
+        }
     };
     const incrementTeam = (team, isWin) => {
         incrementPlayer(team.captain, team.date, isWin, 0);
@@ -81,6 +89,10 @@ onmessage = async function(e) {
         stat.wins = stat.pickWins.reduce((a, b) => a + b);
         stat.winrate = round(stat.wins / stat.total);
         stat.pickWinrate = stat.pickWins.map((wins, i) => round(wins / (stat.pickTotal[i] || 1)));
+
+        stat.sleeperTotal = stat.pickTotal[3] + stat.pickTotal[4];
+        stat.sleeperWins = stat.pickWins[3] + stat.pickWins[4];
+        stat.sleeperWinrate = stat.sleeperWins / (stat.sleeperTotal || 1);
     });
     const candidates = Object.values(stats)
         .filter(stat => stat.total >= MIN_OVERALL_ACTIVITY)
@@ -89,5 +101,10 @@ onmessage = async function(e) {
     const topWinrates = candidates.sort((stat1, stat2) => stat2.winrate - stat1.winrate).slice(0, 10);
     const topCaptains = candidates.sort((stat1, stat2) => stat2.pickWinrate[0] - stat1.pickWinrate[0]).slice(0, 10);
 
-    postMessage({topWins, topWinrates, topCaptains});
+    const sleeperCandidates = Object.values(stats)
+        .filter(stat => stat.sleeperTotal >= MIN_SLEEPER_ACTIVITY)
+        .filter(stat => stat.sleeperActivity >= MIN_RECENT_ACTIVITY);
+    const topSleepers = sleeperCandidates.sort((stat1, stat2) => stat2.sleeperWinrate - stat1.sleeperWinrate).slice(0, 10);
+
+    postMessage({topWins, topWinrates, topCaptains, topSleepers});
 }

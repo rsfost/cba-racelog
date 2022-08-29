@@ -5,6 +5,7 @@ import { ref, onMounted, watch } from 'vue';
 
 const winrateLeaders = ref();
 const captainLeaders = ref();
+const sleeperLeaders = ref();
 
 const props = defineProps({
     raceDay: {
@@ -16,6 +17,7 @@ onMounted(async () => {
     const localStats = await props.raceDay.stats;
     winrateLeaders.value = localStats.topWinrates;
     captainLeaders.value = localStats.topCaptains;
+    sleeperLeaders.value = localStats.topSleepers;
 });
 
 function toPercentStr(ratio) {
@@ -54,6 +56,14 @@ function raceHeader(index) {
                 <ol>
                     <li v-for="leader in captainLeaders">
                         {{ toPercentStr(leader.pickWinrate[0]) }} {{ leader.player }}
+                    </li>
+                </ol>
+            </div>
+            <div>
+                <h3 title="Top winrates as third or fourth pick" style="text-align: center;">Sleepers</h3>
+                <ol>
+                    <li v-for="leader in sleeperLeaders">
+                        {{ toPercentStr(leader.sleeperWinrate) }} {{ leader.player }}
                     </li>
                 </ol>
             </div>
