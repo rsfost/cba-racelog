@@ -2,6 +2,9 @@
 import { computed, ref } from '@vue/reactivity';
 
 const props = defineProps({
+    header: {
+        required: false
+    },
     teams: {
         required: true
     }
@@ -18,6 +21,11 @@ const showLosers = ref(false);
 </script>
 
 <template>
+<h2>
+    {{ header }}
+    <div class="arrow down" v-if="showLosers" @click="showLosers = false"></div>
+    <div class="arrow right" v-else @click="showLosers = true"></div>
+</h2>
 <table>
     <tr class="top3" v-for="t in top3" :key="t.id">
         <td class="sep">{{t.time}}</td>
@@ -36,8 +44,6 @@ const showLosers = ref(false);
         <td>{{t.pick4}}</td>
     </tr>
 </table>
-<i class="uparrow" v-if="showLosers" @click="showLosers = false"></i>
-<i class="downarrow" v-else @click="showLosers = true"></i>
 </template>
 
 <style scoped>
@@ -54,23 +60,36 @@ tr:not(:last-child)>td {
 .sep {
    border-right: solid var(--color-text);
 }
-.downarrow {
-    border: solid var(--color-text);
-    border-width: 0 3px 3px 0;
+
+.arrow {
+    --size: 8px;
+    width: 0;
+    height: 0;
     display: inline-block;
-    padding: 3px;
-    transform: rotate(45deg);
-    -webkit-transform: rotate(45deg);
     cursor: pointer;
 }
 
-.uparrow {
-    border: solid var(--color-text);
-    border-width: 0 3px 3px 0;
-    display: inline-block;
-    padding: 3px;
-    cursor: pointer;
-    transform: rotate(-135deg);
-    -webkit-transform: rotate(-135deg);
+.arrow.up {
+  border-left: var(--size) solid transparent;
+  border-right: var(--size) solid transparent;
+  border-bottom: var(--size) solid var(--color-text);
+}
+
+.arrow.down {
+  border-left: var(--size) solid transparent;
+  border-right: var(--size) solid transparent;
+  border-top: var(--size) solid var(--color-text);
+}
+
+.arrow.right {
+  border-top: var(--size) solid transparent;
+  border-bottom: var(--size) solid transparent;
+  border-left: var(--size) solid var(--color-text);
+}
+
+.arrow.left {
+  border-top: var(--size) solid transparent;
+  border-bottom: var(--size) solid transparent;
+  border-right: var(--size) solid var(--color-text);
 }
 </style>

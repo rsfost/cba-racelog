@@ -21,6 +21,10 @@ onMounted(async () => {
 function toPercentStr(ratio) {
     return `${(ratio * 100).toFixed(1)}`;
 }
+
+function raceHeader(index) {
+    return "Race " + (index + 1);
+}
 </script>
 
 <template>
@@ -32,8 +36,7 @@ function toPercentStr(ratio) {
         MVP ({{ raceDay.mvp.wins }} wins): {{ raceDay.mvp.players.join(', ') }}
     </div>
     <div class="race" v-for="(teams, key) in raceDay.races">
-        <h2>Race {{ key + 1 }}</h2>
-        <TeamList :teams="teams"/>
+        <TeamList :teams="teams" :header="raceHeader(key)"/>
     </div>
     <div class="statWrapper">
         <h3 style="text-align: center;">Leaderboard</h3>
