@@ -21,10 +21,10 @@ const showLosers = ref(false);
 </script>
 
 <template>
-<h2>
+<h2 class="header" @click="showLosers = !showLosers">
     {{ header }}
-    <div class="arrow down" v-if="showLosers" @click="showLosers = false"></div>
-    <div class="arrow right" v-else @click="showLosers = true"></div>
+    <div class="arrow down" v-if="showLosers"></div>
+    <div class="arrow right" v-else></div>
 </h2>
 <table>
     <tr class="top3" v-for="t in top3" :key="t.id">
@@ -57,8 +57,14 @@ td {
 tr:not(:last-child)>td {
     border-bottom: solid var(--color-text);
 }
+
 .sep {
    border-right: solid var(--color-text);
+}
+
+.header {
+    cursor: pointer;
+    width: max-content;
 }
 
 .arrow {
@@ -66,7 +72,6 @@ tr:not(:last-child)>td {
     width: 0;
     height: 0;
     display: inline-block;
-    cursor: pointer;
 }
 
 .arrow.up {
