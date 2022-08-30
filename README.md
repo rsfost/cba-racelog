@@ -1,6 +1,4 @@
-# cba-race-stats
-
-This template should help get you started developing with Vue 3 in Vite.
+# Casual BA Racelog Viewer
 
 ## Recommended IDE Setup
 
@@ -14,6 +12,8 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ```sh
 npm install
+export GOOGLE_API_KEY="your-key-here"
+./utils/download.py > public/data/racelog.json
 ```
 
 ### Compile and Hot-Reload for Development
