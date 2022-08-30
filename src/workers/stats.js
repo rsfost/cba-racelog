@@ -115,5 +115,5 @@ onmessage = async function(e) {
         .filter(stat => stat.sleeperActivity >= MIN_RECENT_ACTIVITY);
     const topSleepers = sleeperCandidates.sort((stat1, stat2) => stat2.sleeperWinrate - stat1.sleeperWinrate).slice(0, LIST_SIZE);
 
-    postMessage({topWins, topWinrates, topCaptains, topSleepers});
+    postMessage({id, topWins, topWinrates, topCaptains, topSleepers});
 }

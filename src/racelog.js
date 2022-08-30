@@ -5,6 +5,16 @@ export const name = 'racelog';
 
 let db;
 
+let statsWorker = new StatsWorker();
+const pendingStats = {};
+statsWorker.onmessage = (e) => {
+    const resolve = pendingStats[e.data.id];
+    if (resolve) {
+        delete pendingStats[e.data.id];
+        resolve(e.data);
+    }
+};
+
 export async function init() {
     const dbPromise = initdb();
     const workerPromise = new Promise((resolve, reject) => {
@@ -36,14 +46,10 @@ function decorate(raceDay) {
 }
 
 function calcStats(raceId) {
-    const worker = new StatsWorker();
     const promise = new Promise((resolve, reject) => {
-        worker.onmessage = (e) => {
-            resolve(e.data);
-            worker.terminate();
-        }
+        pendingStats[raceId] = resolve;
     });
-    worker.postMessage(raceId);
+    statsWorker.postMessage(raceId);
     return promise;
 }
 
