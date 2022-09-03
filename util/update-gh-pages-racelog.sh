@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+cd $SCRIPT_DIR/../docs/data
+
 # Some failsafes to avoid accidental work loss
 if [[ "$(git branch --show-current)" != "gh-pages" ]]; then
   echo "Error: must be on ""gh-pages"" branch"
@@ -21,8 +24,6 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # Download latest racelog from google sheets
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-cd $SCRIPT_DIR/../docs/data
 ../../util/download.py > racelog.json
 if [[ $? -ne 0 ]]; then
   exit 1
