@@ -26,6 +26,7 @@ fi
 # Download latest racelog from google sheets
 ../../util/download.py > racelog.json
 if [[ $? -ne 0 ]]; then
+  git reset --hard origin/gh-pages
   exit 1
 fi
 sha512sum racelog.json > racelog.json.sha512
