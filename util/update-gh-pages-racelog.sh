@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 if [[ "$(git branch --show-current)" != "gh-pages" ]]; then
   echo "Error: must be on ""gh-pages"" branch"
   exit 1
