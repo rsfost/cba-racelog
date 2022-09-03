@@ -18,6 +18,7 @@ if [[ -n $(git diff origin/gh-pages..HEAD) ]]; then
 fi
 
 # Fetch latest and hard reset since this branch is force-pushed
+git branch gh-pages-backup-$(date +%Y-%m-%d-%H-%M-%S)
 git fetch && git reset --hard origin/gh-pages
 if [[ $? -ne 0 ]]; then
   exit 1
