@@ -26,24 +26,26 @@ const showLosers = ref(false);
     <div class="arrow down" v-if="showLosers"></div>
     <div class="arrow right" v-else></div>
 </h2>
-<table>
-    <tr class="top3" v-for="t in top3" :key="t.id">
-        <td class="sep">{{t.time}}</td>
-        <td>{{t.captain}}</td>
-        <td>{{t.pick1}}</td>
-        <td>{{t.pick2}}</td>
-        <td>{{t.pick3}}</td>
-        <td>{{t.pick4}}</td>
-    </tr>
-    <tr v-for="t in losers" :key="t.id" v-if="showLosers">
-        <td class="sep">{{t.time}}</td>
-        <td>{{t.captain}}</td>
-        <td>{{t.pick1}}</td>
-        <td>{{t.pick2}}</td>
-        <td>{{t.pick3}}</td>
-        <td>{{t.pick4}}</td>
-    </tr>
-</table>
+<div class="tableWrapper">
+    <table>
+        <tr class="top3" v-for="t in top3" :key="t.id">
+            <td class="sep">{{t.time}}</td>
+            <td>{{t.captain}}</td>
+            <td>{{t.pick1}}</td>
+            <td>{{t.pick2}}</td>
+            <td>{{t.pick3}}</td>
+            <td>{{t.pick4}}</td>
+        </tr>
+        <tr v-for="t in losers" :key="t.id" v-if="showLosers">
+            <td class="sep">{{t.time}}</td>
+            <td>{{t.captain}}</td>
+            <td>{{t.pick1}}</td>
+            <td>{{t.pick2}}</td>
+            <td>{{t.pick3}}</td>
+            <td>{{t.pick4}}</td>
+        </tr>
+    </table>
+</div>
 </template>
 
 <style scoped>
@@ -56,6 +58,10 @@ td {
 }
 tr:not(:last-child)>td {
     border-bottom: solid var(--color-text);
+}
+
+.tableWrapper {
+    overflow-x: scroll;
 }
 
 .sep {
