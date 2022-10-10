@@ -49,7 +49,12 @@ export function forEach(keyRange, func) {
                 resolve();
                 return;
             }
-            func(cursor.value);
+
+            const earlyResolve = func(cursor.value);
+            if (earlyResolve) {
+                resolve();
+                return;
+            }
             cursor.continue();
         };
     });
