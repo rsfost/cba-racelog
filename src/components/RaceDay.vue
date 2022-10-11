@@ -108,5 +108,10 @@ function raceHeader(index) {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    flex-wrap: wrap;
+}
+
+li {
+    white-space: nowrap;
 }
 </style>

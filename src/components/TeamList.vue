@@ -55,6 +55,10 @@ table {
 td {
     padding: 10px;
     margin: 0;
+    white-space: nowrap;
+}
+td:not(:first-child) {
+    min-width: 150px;
 }
 tr:not(:last-child)>td {
     border-bottom: solid var(--color-text);
