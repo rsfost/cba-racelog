@@ -65,7 +65,7 @@ tr:not(:last-child)>td {
 }
 
 .tableWrapper {
-    overflow-x: scroll;
+    overflow-x: auto;
 }
 
 .sep {
