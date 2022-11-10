@@ -96,6 +96,8 @@ function raceHeader(index) {
 
 .mvp {
     padding-left: 20px;
+    padding-right: 20px;
+    max-width: fit-content;
 }
 
 .statWrapper {
