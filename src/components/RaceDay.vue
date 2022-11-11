@@ -83,6 +83,7 @@ function raceHeader(index) {
 }
 
 .raceDay {
+    max-width: 870px;
     background: var(--color-background-layer1);
     padding-bottom: 10px;
     margin-bottom: 20px;
@@ -97,7 +98,6 @@ function raceHeader(index) {
 .mvp {
     padding-left: 20px;
     padding-right: 20px;
-    max-width: fit-content;
 }
 
 .statWrapper {
