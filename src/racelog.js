@@ -72,14 +72,10 @@ function calcMvp(raceDay) {
         }
         ++winCount.wins;
     };
-    raceDay.races.flatMap(race => race.filter(team => team.position === "1"))
-        .forEach(team => {
-            increment(team.captain);
-            increment(team.pick1);
-            increment(team.pick2);
-            increment(team.pick3);
-            increment(team.pick4);
-        });
+    raceDay.races
+        .flatMap(race => race.filter(team => team.position === "1"))
+        .flatMap(team => team.picks)
+        .forEach(player => increment(player));
     const sortedWins = Object.values(winCounts).sort((wins1, wins2) => {
         let diff = wins2.wins - wins1.wins;
         if (diff == 0) {
