@@ -1,6 +1,7 @@
 import InitWorker from './workers/init?worker'
 import StatsWorker from './workers/stats?worker'
 import { initdb, forEach } from './db'
+import Team from './team';
 export const name = 'racelog';
 
 let db;
@@ -31,6 +32,9 @@ export async function getRaceDays(start = 0, count = 10) {
     const keyRange = IDBKeyRange.bound(start, start + count, false, true);
     const returnValue = [];
     await forEach(keyRange, (raceDay) => {
+        raceDay.races.forEach((teams, index) => {
+            raceDay.races[index] = teams.map(team => Team.fromDto(team));
+        });
         returnValue.push(decorate(raceDay))
     });
     return returnValue;
