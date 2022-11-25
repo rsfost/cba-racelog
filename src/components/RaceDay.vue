@@ -2,6 +2,7 @@
 import TeamList from './TeamList.vue';
 import { prettyPrintDate } from '@/utils.js';
 import { ref, onMounted, watch } from 'vue';
+import { computed } from '@vue/reactivity';
 
 const winrateLeaders = ref();
 const captainLeaders = ref();
@@ -10,6 +11,28 @@ const sleeperLeaders = ref();
 const props = defineProps({
     raceDay: {
         required: true
+    }
+});
+
+const mvpRow = computed(() => {
+    const mvp = props.raceDay.mvp;
+    if (mvp.wins <= 1) {
+        return 'MVP: No one!';
+    } else {
+        let str = `MVP (${mvp.wins} wins): `;
+        const players = props.raceDay.mvp.players;
+        if (mvp.players.length == 1) {
+            str += players[0];
+        } else if (players.length == 2) {
+            str += `${players[0]} and ${players[1]}`;
+        } else {
+            let i = 0;
+            for (; i < players.length - 1; ++i) {
+                str += `${players[i]}, `;
+            }
+            str += `and ${players[i]}`;
+        }
+        return str;
     }
 });
 
@@ -35,7 +58,7 @@ function raceHeader(index) {
         <h1>{{ prettyPrintDate(raceDay.date) }}</h1>
     </div>
     <div class="mvp">
-        MVP ({{ raceDay.mvp.wins }} wins): {{ raceDay.mvp.players.join(', ') }}
+        {{ mvpRow }}
     </div>
     <div class="race" v-for="(teams, key) in raceDay.races">
         <TeamList :teams="teams" :header="raceHeader(key)"/>
