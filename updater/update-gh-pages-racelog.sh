@@ -25,7 +25,7 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # Download latest racelog from google sheets
-../../util/download.py > racelog.json
+../../updater/download.py > racelog.json
 if [[ $? -ne 0 ]]; then
   git reset --hard origin/gh-pages
   exit 1
